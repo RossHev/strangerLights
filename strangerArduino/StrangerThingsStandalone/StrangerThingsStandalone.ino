@@ -39,32 +39,32 @@ void setup() {
   /**
     Array location for each letter. We can use this to dynamically create messages based on strings.
   */
-  charToLed[0]('a', 0);
-  charToLed[1]('b', 2);
-  charToLed[3]('c', 4);
-  charToLed[4]('d', 6);
-  charToLed[5]('e', 8);
-  charToLed[6]('f', 10);
-  charToLed[7]('g', 12);
-  charToLed[8]('h', 14);
-  charToLed[9]('i', 29);
-  charToLed[10]('j', 27);
-  charToLed[11]('k', 25);
-  charToLed[12]('l', 23);
-  charToLed[13]('m', 21);
-  charToLed[14]('n', 19);
-  charToLed[15]('o', 17);
-  charToLed[16]('p', 16);
-  charToLed[17]('q', 32);
-  charToLed[18]('r', 34);
-  charToLed[19]('s', 36);
-  charToLed[20]('t', 38);
-  charToLed[21]('u', 40);
-  charToLed[22]('v', 42);
-  charToLed[23]('w', 44);
-  charToLed[24]('x', 49);
-  charToLed[25]('y', 48);
-  charToLed[26]('z', 46);
+  charToLed[0]('A', 49);
+  charToLed[1]('B', 48);
+  charToLed[3]('C', 46);
+  charToLed[4]('D', 44);
+  charToLed[5]('E', 42);
+  charToLed[6]('F', 40);
+  charToLed[7]('G', 38);
+  charToLed[8]('H', 36);
+  charToLed[9]('I', 19);
+  charToLed[10]('J', 21);
+  charToLed[11]('K', 23);
+  charToLed[12]('L', 25);
+  charToLed[13]('M', 27);
+  charToLed[14]('N', 29);
+  charToLed[15]('O', 31);
+  charToLed[16]('P', 33);
+  charToLed[17]('Q', 17);
+  charToLed[18]('R', 15);
+  charToLed[19]('S', 13);
+  charToLed[20]('T', 11);
+  charToLed[21]('U', 9);
+  charToLed[22]('V', 7);
+  charToLed[23]('W', 5);
+  charToLed[24]('X', 3);
+  charToLed[25]('Y', 2);
+  charToLed[26]('Z', 0);
 
   randomSeed(analogRead(0));
 }
@@ -79,21 +79,24 @@ void loop()
   FastLED.clear();
   FastLED.show();
   //notifyPi();
-  delay(random(2500, 5000)); //delay to wait for serial response, randomize the delay to make it creepier
-  String msgStr = "random";
+  //delay(random(1000, 2500)); //delay to wait for serial response, randomize the delay to make it creepier
+  String msgStr = "RANDOM";
+  msgStr.reserve(50);
   if (Serial.available() > 0)
   {
     msgStr = Serial.readString();
-    if (msgStr == "testled")
+    msgStr.toUpperCase();
+    if (msgStr == "TESTTEST")
     {
       Serial.println("LED test queued");
-      interpretMessage("abcdefghijklmnopqrstuvwxyz", true); // Change false to true if you want to enable random effects when no messages are queued
-
+      interpretMessage("ABCDEFGHIJKLMNOPQRSTUVWXYZ", true); // Change false to true if you want to enable random effects when no messages are queued
+      msgStr = "RANDOM";
     }
     else
     {
       Serial.println("Message '" + msgStr + "' queued");
       interpretMessage(msgStr, true); // Change false to true if you want to enable random effects when no messages are queued
+      //msgStr = "RANDOM";
     }
   } else {
     doRandom();
@@ -104,7 +107,7 @@ void loop()
 
 void interpretMessage(String msgStr, bool randomEnabled) {
   if (randomEnabled) {
-    if (msgStr.equals("random")) {
+    if (msgStr.equals("RANDOM")) {
       doRandom();
     } else {
       displayMessage(msgStr);
@@ -125,10 +128,10 @@ void interpretMessage(String msgStr, bool randomEnabled) {
 */
 
 void doRandom() {
-  int rNum = random(6);
+  int rNum = random(5);
   switch (rNum) {
     case 0:
-      glowRedUp();
+      randomLights();
       break;
     case 1:
       lightRun();
@@ -142,9 +145,9 @@ void doRandom() {
     case 4:
       endsToMiddle();
       break;
-    case 5:
-      randomLights();
-      break;
+    /*case 5:
+      glowRedUp();
+      break;*/
     default:
       lightRun();
       break;
@@ -326,6 +329,7 @@ void christmas() {
   FastLED.clear();
 }
 
+/*
 void glowRedUp() {
   for ( int i = 20; i < 150; i = i + y ) {
 
@@ -356,4 +360,6 @@ void glowRedDown() {
     delay(100);
   }
 }
+*/
+
 
