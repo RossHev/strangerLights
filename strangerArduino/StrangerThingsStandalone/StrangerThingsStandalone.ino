@@ -112,7 +112,7 @@ void interpretMessage(String msgStr, bool randomEnabled) {
       doRandom();
     }
   } else {
-    if ( ! msgStr.equals("random") ) {
+    if ( ! msgStr.equals("RANDOM") ) {
       displayMessage(msgStr);
     }
   }
@@ -120,7 +120,7 @@ void interpretMessage(String msgStr, bool randomEnabled) {
 }
 
 void doRandom() {
-  int rNum = random(7);
+  int rNum = random(8);
   //Serial.println(rNum); //Print rNum to serial for debugging
 
   switch (rNum) {
@@ -143,7 +143,8 @@ void doRandom() {
       blinkEach();
       break;
     case 6:
-      flickerLeds(50);
+    case 7:
+      flickerLeds(70);
       break;
     default:
       lightRun();
