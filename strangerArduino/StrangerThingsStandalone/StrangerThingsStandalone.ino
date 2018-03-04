@@ -78,8 +78,7 @@ void loop()
   }
   FastLED.clear();
   FastLED.show();
-  //notifyPi();
-  //delay(random(1000, 2500)); //delay to wait for serial response, randomize the delay to make it creepier
+
   String msgStr = "RANDOM";
   msgStr.reserve(50);
   if (Serial.available() > 0)
@@ -94,9 +93,8 @@ void loop()
     }
     else
     {
-      Serial.println("Message '" + msgStr + "' queued");
+      Serial.println("User message '" + msgStr + "' queued");
       interpretMessage(msgStr, true); // Change false to true if you want to enable random effects when no messages are queued
-      //msgStr = "RANDOM";
     }
   } else {
     doRandom();
@@ -121,14 +119,10 @@ void interpretMessage(String msgStr, bool randomEnabled) {
 
 }
 
-/*
-  void notifyPi(){
-  Serial.println("ready");
-  }
-*/
-
 void doRandom() {
-  int rNum = random(5);
+  int rNum = random(7);
+  //Serial.println(rNum); //Print rNum to serial for debugging
+
   switch (rNum) {
     case 0:
       randomLights();
@@ -145,24 +139,16 @@ void doRandom() {
     case 4:
       endsToMiddle();
       break;
-    /*case 5:
-      glowRedUp();
-      break;*/
+    case 5:
+      blinkEach();
+      break;
+    case 6:
+      flickerLeds(50);
+      break;
     default:
       lightRun();
       break;
 
-      /* Disabled message displays as I don't want them interfering with user messages
-        case 3:
-        displayMessage("die");
-        break;
-        case 4:
-        displayMessage("helpme");
-        break;
-        case 5:
-        displayMessage("itscoming");
-        break;
-      */
   }
 }
 
@@ -194,6 +180,7 @@ void endsToMiddle() {
 
 }
 
+
 //Turn on Random strips of 5
 void randomLights() {
   int startingLight;
@@ -208,6 +195,7 @@ void randomLights() {
     blinkSection(startingLight, endingLight, 1);
   }
 }
+
 
 //flashes lights starting at startingPos position to end position numlights and flashes numFlashes times
 void blinkSection(int startingPos, int endPos, int numFlashes) {
@@ -296,6 +284,7 @@ CRGB randomColor() {
   return CRGB(r, g, b);
 }
 
+
 //Cool functions created by bxl4662
 void christmas() {
   FastLED.clear();
@@ -329,37 +318,40 @@ void christmas() {
   FastLED.clear();
 }
 
-/*
-void glowRedUp() {
-  for ( int i = 20; i < 150; i = i + y ) {
 
-    r = i;
-    b = 0;
-    g = 0;
-
-    for (int x = 0; x < NUM_LEDS; x++) {
-      leds[x] = CRGB(r, g, b);
-    }
-
+//blink each individual light from beginning to end
+void blinkEach() {
+  for (int i = NUM_LEDS - 1; i >= 0; i--) {
+    FastLED.clear();
+    leds[i] = randomColor();
     FastLED.show();
-    delay(100);
+    delay(500);
   }
 }
-void glowRedDown() {
-  for (int i = 150; i > 20; i = i - y) {
 
-    r = i;
-    b = 0;
-    g = 0;
 
-    for (int x = 0; x < NUM_LEDS; x++) {
-      leds[x] = CRGB(r, g, b);
-    }
-
-    FastLED.show();
-    delay(100);
+//creepy flicker
+//adapted from code at http://www.woodlandmanufacturing.com/articles/news/how-to-make-a-stranger-things-alphabet-sign-with-lights-code/
+void flickerLeds(int numTimes)
+{
+  for ( int i = 0; i < numTimes; i++)
+  {
+    flicker();
   }
 }
-*/
+
+void flicker() {
+  int random_bright = random(0, 255);
+  int random_delay = random(10, 100);
+
+  for (int i = 0; i < NUM_LEDS; i++)
+  {
+    //Serial.println(i);
+    leds[i] = randomColor();
+    leds[i].fadeLightBy(random_bright);
+  }
+  FastLED.show();
+  delay(random_delay);
+}
 
 
