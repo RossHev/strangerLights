@@ -142,6 +142,7 @@ void doRandom() {
     case 5:
       blinkEach();
       break;
+    //flickerLEDs in 2 cases so that it will play more often than the others  
     case 6:
     case 7:
       flickerLeds(70);
@@ -332,7 +333,8 @@ void blinkEach() {
 
 
 //creepy flicker
-//adapted from code at http://www.woodlandmanufacturing.com/articles/news/how-to-make-a-stranger-things-alphabet-sign-with-lights-code/
+//adapted from code at 
+  //http://www.woodlandmanufacturing.com/articles/news/how-to-make-a-stranger-things-alphabet-sign-with-lights-code/
 void flickerLeds(int numTimes)
 {
   for ( int i = 0; i < numTimes; i++)
